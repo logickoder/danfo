@@ -1,0 +1,26 @@
+# secrets, never commit
+.env
+.env.*
+!.env.example
+
+# next / node
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# os / editor
+.DS_Store
+.idea/
+.vscode/
+.mcp.json
+.playwright-mcp/
+
+# Local planning/handoff docs (not shipped)
+_handoff/
+
+# cloudflare (opennext build output, wrangler state)
+.open-next/
+.wrangler/
+.dev.vars*
