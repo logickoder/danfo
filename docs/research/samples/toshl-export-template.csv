@@ -1,0 +1,5 @@
+﻿"Date","Account","Category","Tags","Expense amount","Income amount","Currency","In main currency","Main currency","Description"
+08/09/2016,Cash,Food & Drinks,restaurants,22.00,0,EUR,22.00,EUR,
+08/09/2016,Cash,Home & Utilities,internet,29.99,0,EUR,29.99,EUR,
+10/09/2016,Cash,Leisure,Netlifx,10.00,0,EUR,10.00,EUR,"Netflix subscription"
+10/09/2016,Cash,Health & Personal Care,membership fees,30.00,0,EUR,30.00,EUR,"Gym membership"
