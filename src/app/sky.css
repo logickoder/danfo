@@ -1,0 +1,62 @@
+/* Time of day (DESIGN.md, Time of day). The pre-paint script in layout.tsx sets
+   html[data-sky] from the Lagos clock; the sun or moon button flips it for the visit. Only
+   elements inside .sky-scene (the nav and the hero) change: the rest of the page stays light. */
+.sky-scene {
+  --sky: var(--color-sky);
+  --sky-text: var(--color-ink);
+  --sky-text-soft: var(--color-ink-soft);
+  background-color: var(--sky);
+  color: var(--sky-text);
+}
+html[data-sky='night'] .sky-scene {
+  --sky: #1e1c24;
+  --sky-text: var(--color-paper);
+  --sky-text-soft: #cfc8b8;
+}
+.sky-text {
+  color: var(--sky-text);
+}
+.sky-text-soft {
+  color: var(--sky-text-soft);
+}
+
+.sky-night-only {
+  display: none;
+}
+html[data-sky='night'] .sky-scene .sky-night-only {
+  display: inline;
+}
+html[data-sky='night'] .sky-scene .sky-day-only {
+  display: none;
+}
+
+.bld-roof { fill: #f7edd6; }
+.bld-face-light { fill: #efe2c4; }
+.bld-face-dark { fill: #e8d3a8; }
+.bld-side-light { fill: #dcc9a0; }
+.bld-side-dark { fill: #d2bb8c; }
+.bld-windows { fill: var(--color-ink); opacity: 0.18; }
+html[data-sky='night'] .sky-scene .bld-roof { fill: #3a3840; }
+html[data-sky='night'] .sky-scene .bld-face-light { fill: #2b2a30; }
+html[data-sky='night'] .sky-scene .bld-face-dark { fill: #302e35; }
+html[data-sky='night'] .sky-scene .bld-side-light { fill: #222127; }
+html[data-sky='night'] .sky-scene .bld-side-dark { fill: #252429; }
+html[data-sky='night'] .sky-scene .bld-windows { fill: var(--color-yellow); opacity: 0.85; }
+
+.bus-window { fill: #263238; }
+.bus-glint { fill: #3c4a52; }
+html[data-sky='night'] .sky-scene .bus-window { fill: #ffd54a; }
+html[data-sky='night'] .sky-scene .bus-glint { fill: #ffe9a0; }
+
+.sun-disc { fill: var(--color-yellow); }
+html[data-dusk='true'] .sun-disc { fill: #f28c28; }
+
+/* The sun sits where the clock puts it. Defaults hold if the script never ran. */
+.sun-spot {
+  left: var(--sun-x, 50%);
+  top: var(--sun-y, 30%);
+}
+html[data-sky='night'] .sun-spot {
+  left: 62%;
+  top: 25%;
+}

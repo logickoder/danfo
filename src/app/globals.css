@@ -1,0 +1,47 @@
+@import "tailwindcss";
+@import "./motion.css";
+@import "./sky.css";
+
+/* Danfo design tokens (DESIGN.md). Light theme on purpose. One brand accent: danfo yellow.
+   Black is a first-class color (borders, kerb stripes, ink bands), not just text. */
+@theme {
+  --color-paper: #faf7f0;
+  --color-sky: #f6e9c9;
+  --color-card: #ffffff;
+  --color-ink: #111111;
+  --color-ink-soft: #4a4a4a;
+  --color-asphalt: #2e2e2e;
+  --color-yellow: #f2b705;
+  --color-yellow-deep: #d9a404;
+  --color-success: #1a7f37;
+  --color-error: #c62828;
+  --color-hazard: #ff9f1c;
+  --color-kraft: #8b5e34;
+
+  /* Hard offset shadows: the sticker look. No blur, ever. */
+  --shadow-hard-3: 3px 3px 0 0 var(--color-ink);
+  --shadow-hard-4: 4px 4px 0 0 var(--color-ink);
+  --shadow-hard-6: 6px 6px 0 0 var(--color-ink);
+  --shadow-hard-8: 8px 8px 0 0 var(--color-ink);
+  --shadow-hard-paper-5: 5px 5px 0 0 var(--color-paper);
+
+  --font-display: var(--font-bungee), Impact, sans-serif;
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+}
+
+html {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
