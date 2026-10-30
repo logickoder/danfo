@@ -46,6 +46,12 @@ describe('routeReducer', () => {
     expect(next).toEqual({ kind: 'parsed', file: FILE, data: DATA })
   })
 
+  it('parsing -> targetChosen when the page already named the app', () => {
+    const state: RouteState = { kind: 'parsing', file: FILE, requestId: 1 }
+    const next = routeReducer(state, { type: 'PARSE_OK', requestId: 1, data: DATA, targetId: 'ynab' })
+    expect(next).toEqual({ kind: 'targetChosen', file: FILE, data: DATA, targetId: 'ynab' })
+  })
+
   it('ignores PARSE_OK with a stale requestId', () => {
     const state: RouteState = { kind: 'parsing', file: FILE, requestId: 2 }
     const next = routeReducer(state, { type: 'PARSE_OK', requestId: 1, data: DATA })

@@ -59,7 +59,9 @@ export function LoadedView({
               </div>
             ))}
           </div>
-          <p className="mt-1.5 text-[13px] text-ink-soft">The first {rows.length} rows of your statement. Check them before you import.</p>
+          <p className="mt-1.5 text-[13px] text-ink-soft">
+            {rows.length === 1 ? 'The first row' : `The first ${rows.length} rows`} of your statement. Check before you import.
+          </p>
         </div>
       )}
       <AppPicker selected={target} onChoose={onChoose} />

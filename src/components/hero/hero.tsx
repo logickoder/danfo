@@ -7,6 +7,7 @@ import { Street } from '@/components/scene/street'
 import { parseStatement, rejectFile } from '@/lib/parse-client'
 import { busLoad, initialRouteState, routeData, routeReducer } from '@/lib/route-state'
 import { saveFile } from '@/lib/save-file'
+import { heading as headingFor, type Heading } from '@/lib/site'
 import { FEATURED_NAMES, findTarget } from '@/lib/targets'
 import { downloadName } from '@/writers/target'
 
@@ -15,8 +16,17 @@ import { SkyToggle } from './sky-toggle'
 import { Turnstile, type TurnstileHandle } from './turnstile'
 
 interface HeroProps {
-  turnstileSiteKey: string
+  heading?: Heading
+  intro?: string
+  /** A bank-and-app page names the app, so the card arrives with it picked after the parse. */
+  targetId?: string
 }
+
+const HOME_HEADING = headingFor()
+const HOME_INTRO = `Stop typing transactions by hand. Drop your bank statement PDF, get the exact file ${FEATURED_NAMES} imports.`
+
+// Inlined at build (NEXT_PUBLIC_), so the client reads it directly.
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? ''
 
 // The sky and the street never change with the converter's state: keep them out of every dispatch.
 const Scene = memo(function Scene() {
@@ -28,7 +38,7 @@ const Scene = memo(function Scene() {
   )
 })
 
-export function Hero({ turnstileSiteKey }: HeroProps) {
+export function Hero({ heading = HOME_HEADING, intro = HOME_INTRO, targetId }: HeroProps) {
   const [state, dispatch] = useReducer(routeReducer, initialRouteState)
   const requestIdRef = useRef(0)
   const turnstileRef = useRef<TurnstileHandle>(null)
@@ -58,7 +68,7 @@ export function Hero({ turnstileSiteKey }: HeroProps) {
     const result = await parseStatement(file, token)
     dispatch(
       result.ok
-        ? { type: 'PARSE_OK', requestId, data: result.data }
+        ? { type: 'PARSE_OK', requestId, data: result.data, targetId }
         : { type: 'PARSE_FAILED', requestId, code: result.code },
     )
   }
@@ -108,14 +118,14 @@ export function Hero({ turnstileSiteKey }: HeroProps) {
             Free · No sign-up · Nothing stored
           </span>
           <h1 className="font-display text-[clamp(26px,8.2vw,32px)] leading-[1.15] lg:text-[62px] lg:leading-[1.1]">
-            Statement in.
+            {heading.line}
             <br />
             <span className="mt-2 inline-block rounded-lg border-[3px] border-ink bg-yellow text-ink px-2.5 pt-0.5 pb-1.5 shadow-hard-4 lg:mt-2.5 lg:px-4 lg:pb-2.5 lg:shadow-hard-6">
-              Budget out.
+              {heading.plate}
             </span>
           </h1>
           <p className="max-w-[540px] sky-text text-base leading-relaxed lg:text-xl">
-            Stop typing transactions by hand. Drop your bank statement PDF, get the exact file {FEATURED_NAMES} imports.
+            {intro}
           </p>
         </div>
 
@@ -127,7 +137,7 @@ export function Hero({ turnstileSiteKey }: HeroProps) {
           onRetry={handleRetry}
           onReset={() => dispatch({ type: 'RESET' })}
         >
-          <Turnstile ref={turnstileRef} siteKey={turnstileSiteKey} />
+          <Turnstile ref={turnstileRef} siteKey={TURNSTILE_SITE_KEY} />
         </HeroCard>
       </div>
     </section>

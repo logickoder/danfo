@@ -7,6 +7,7 @@ import { BANKS } from '@/lib/statement'
 import { TARGETS } from '@/writers'
 
 import { DestinationBoard } from './destination-board'
+import { Section, SectionTitle } from './section'
 
 // "Three stops. One trip.": bus-stop signposts on the kerb. Desktop: signs in a row, each post
 // part of its sign so it always reaches the kerb whatever the sign's height. Narrow screens:
@@ -42,11 +43,11 @@ function Sign({ n, label, title, children }: SignProps) {
 
 export function RouteStops() {
   return (
-    <section id="how" aria-labelledby="how-title" className="mx-auto flex max-w-[1200px] flex-col gap-8 px-5 py-14 md:py-20">
+    <Section id="how" titleId="how-title">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
-        <h2 id="how-title" className="font-display text-[26px] leading-tight md:text-[40px]">
+        <SectionTitle id="how-title">
           Three stops. One trip.
-        </h2>
+        </SectionTitle>
         <p className="max-w-[380px] text-[15px] leading-relaxed text-ink-soft md:text-base">
           Board at your bank. Alight at your budget app. You name the app, we handle the format.
         </p>
@@ -84,6 +85,6 @@ export function RouteStops() {
           </div>
         </div>
       </div>
-    </section>
+    </Section>
   )
 }

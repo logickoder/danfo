@@ -24,6 +24,9 @@ const BUILDINGS: readonly Building[] = [
 const FACE = { light: 'bld-face-light', dark: 'bld-face-dark' } as const
 const SIDE = { light: 'bld-side-light', dark: 'bld-side-dark' } as const
 const GROUND = 140
+const STREET_HEIGHT = 300
+/** The skyline's own width; it repeats past it on wider screens. */
+const SKYLINE_WIDTH = 1440
 const LAMPS = [300, 740, 1220] as const
 
 /** Kerb and lane-dash patterns, defined once per SVG. `id` keeps several SVGs apart. */
@@ -54,18 +57,10 @@ function RoadPatterns({ id, vertical = false }: { id: string; vertical?: boolean
   )
 }
 
-/** Skyline plus road, anchored to the bottom of its box. 300px tall, any width. */
-export function Street({ className }: { className?: string }) {
+/** One 1440px-wide stretch of buildings and street lamps, in pixels. */
+function Skyline() {
   return (
-    <svg
-      viewBox="0 0 1440 300"
-      preserveAspectRatio="xMidYMax slice"
-      className={className}
-      aria-hidden="true"
-      focusable="false"
-    >
-      <RoadPatterns id="street" />
-      <rect className="sky-night-only" x="0" y={GROUND - 100} width="1440" height="100" fill="#3A2A1A" />
+    <>
       <g stroke="#111111" strokeWidth="2" strokeLinejoin="round">
         {BUILDINGS.map(({ x, w, h, tone }) => {
           const top = GROUND - h
@@ -104,10 +99,36 @@ export function Street({ className }: { className?: string }) {
           </g>
         ))}
       </g>
-      <rect x="0" y={GROUND} width="1440" height={300 - GROUND} fill="#2E2E2E" />
-      <rect x="0" y={GROUND} width="1440" height="16" fill="url(#street-kerb)" />
-      <rect x="0" y={GROUND - 2} width="1440" height="2" fill="#111111" />
-      <rect x="0" y="250" width="1440" height="6" fill="url(#street-dash)" />
+    </>
+  )
+}
+
+// Copies of the skyline either side of centre: covers screens up to about 4300px wide.
+const SKYLINE_OFFSETS = [-SKYLINE_WIDTH, 0, SKYLINE_WIDTH] as const
+
+/**
+ * Skyline plus road, 300px tall, any width. Drawn at real pixel size, never scaled: wider
+ * screens show more street, not a zoomed one, so no rooftop is ever cropped. The skyline is
+ * centred and repeats; the road and kerb run the full width.
+ */
+export function Street({ className }: { className?: string }) {
+  return (
+    <svg className={className} aria-hidden="true" focusable="false">
+      <RoadPatterns id="street" />
+      <rect className="sky-night-only" x="0" y={GROUND - 100} width="100%" height="100" fill="#3A2A1A" />
+      <svg x="50%" overflow="visible">
+        <g transform={`translate(${-SKYLINE_WIDTH / 2} 0)`}>
+          {SKYLINE_OFFSETS.map((offset) => (
+            <g key={offset} transform={`translate(${offset} 0)`}>
+              <Skyline />
+            </g>
+          ))}
+        </g>
+      </svg>
+      <rect x="0" y={GROUND} width="100%" height={STREET_HEIGHT - GROUND} fill="#2E2E2E" />
+      <rect x="0" y={GROUND} width="100%" height="16" fill="url(#street-kerb)" />
+      <rect x="0" y={GROUND - 2} width="100%" height="2" fill="#111111" />
+      <rect x="0" y="250" width="100%" height="6" fill="url(#street-dash)" />
     </svg>
   )
 }

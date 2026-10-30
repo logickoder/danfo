@@ -34,7 +34,7 @@ export type RouteEvent =
   | { type: 'FILE_CHOSEN'; file: File }
   | { type: 'FILE_REJECTED'; code: ParseErrorCode }
   | { type: 'PARSE_STARTED'; requestId: number }
-  | { type: 'PARSE_OK'; requestId: number; data: ParseResponse }
+  | { type: 'PARSE_OK'; requestId: number; data: ParseResponse; targetId?: string }
   | { type: 'PARSE_FAILED'; requestId: number; code: ParseErrorCode }
   | { type: 'TARGET_CHOSEN'; targetId: string }
   | { type: 'DOWNLOADED' }
@@ -68,6 +68,8 @@ export function routeReducer(state: RouteState, event: RouteEvent): RouteState {
       // one (the user swapped files mid-parse). Keyed on a counter, not File identity, so two
       // selections of the same file are still distinguishable.
       if (state.kind !== 'parsing' || state.requestId !== event.requestId) return state
+      // A bank-and-app page names the app up front, so its card arrives with it picked.
+      if (event.targetId) return { kind: 'targetChosen', file: state.file, data: event.data, targetId: event.targetId }
       return { kind: 'parsed', file: state.file, data: event.data }
 
     case 'PARSE_FAILED':

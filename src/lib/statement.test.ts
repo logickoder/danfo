@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { bankName, checkLines, periodLabel, previewRows, statementSummary } from './statement'
+import { bankName, checkLines, periodLabel, previewRows, statementSummary, withArticle } from './statement'
 import type { ParseResponse } from '@/lib/types'
 
 const DATA: ParseResponse = {
@@ -43,6 +43,13 @@ describe('periodLabel', () => {
 
   it('is null without metadata', () => {
     expect(periodLabel({ ...DATA, metadata: null })).toBeNull()
+  })
+})
+
+describe('withArticle', () => {
+  it('takes "an" before a vowel and "a" otherwise', () => {
+    expect(withArticle('OPay')).toBe('an OPay')
+    expect(withArticle('First Bank')).toBe('a First Bank')
   })
 })
 

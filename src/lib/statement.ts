@@ -4,13 +4,61 @@ import { isoDateOnly, statementLegs } from '../writers/shared'
 // Pure display helpers for a parsed statement. Money stays a string throughout: the sign is a
 // string prefix and the amount is the DecimalString exactly as it arrived.
 
+export interface Bank {
+  /** The engine's slug: metadata.bank in a parse. */
+  id: string
+  name: string
+  /** URL segment for the bank's pages. */
+  slug: string
+  /**
+   * What the engine checks before a file is made, in one sentence for the bank's pages. From
+   * each parser in bankstract (src/bankstract/parsers/), never a guess.
+   */
+  checks: string
+  /** The statement prints a time per row, which apps that take times keep. */
+  hasTime: boolean
+  /** The statement prints a running balance per row. */
+  printsBalance: boolean
+}
+
 /** Banks on the route today. Mirrors the engine's parser list (bankstract-cloud /v1/banks). */
-export const BANKS: readonly { id: string; name: string }[] = [
-  { id: 'fbn', name: 'First Bank' },
-  { id: 'opay', name: 'OPay' },
-  { id: 'palmpay', name: 'PalmPay' },
-  { id: 'zenith', name: 'Zenith Bank' },
+export const BANKS: readonly Bank[] = [
+  {
+    id: 'fbn',
+    name: 'First Bank',
+    slug: 'first-bank',
+    checks: "Every running balance is checked against the one before it, and the rows against the statement's own totals.",
+    hasTime: false,
+    printsBalance: true,
+  },
+  {
+    id: 'opay',
+    name: 'OPay',
+    slug: 'opay',
+    checks: "The rows are checked against the statement's own totals. Running balances are not: OWealth auto-save moves skip them, so rows don't chain.",
+    hasTime: true,
+    printsBalance: true,
+  },
+  {
+    id: 'palmpay',
+    name: 'PalmPay',
+    slug: 'palmpay',
+    checks: "PalmPay prints no running balance, so the rows are checked against the statement's own totals.",
+    hasTime: true,
+    printsBalance: false,
+  },
+  {
+    id: 'zenith',
+    name: 'Zenith Bank',
+    slug: 'zenith-bank',
+    checks: 'Every running balance is checked against the one before it.',
+    hasTime: false,
+    printsBalance: true,
+  },
 ]
+
+/** "First Bank, OPay, PalmPay, or Zenith Bank": every bank, as a choice in a sentence. */
+export const BANK_NAMES = new Intl.ListFormat('en', { type: 'disjunction' }).format(BANKS.map((b) => b.name))
 
 const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -30,11 +78,16 @@ export function periodLabel(data: ParseResponse): string | null {
   return month ? `${month} ${year}` : null
 }
 
+/** "a First Bank", "an OPay": the article a bank name takes, by its first letter. */
+export function withArticle(name: string): string {
+  return `${/^[AEIOU]/.test(name) ? 'an' : 'a'} ${name}`
+}
+
 /** The file chip's second line: "Read as a First Bank statement · August 2026". */
 export function statementSummary(data: ParseResponse): string {
   const bank = bankName(data.metadata?.bank)
   const period = periodLabel(data)
-  const read = bank ? `Read as ${/^[AEIOU]/.test(bank) ? 'an' : 'a'} ${bank} statement` : 'Statement read'
+  const read = bank ? `Read as ${withArticle(bank)} statement` : 'Statement read'
   return period ? `${read} · ${period}` : read
 }
 
