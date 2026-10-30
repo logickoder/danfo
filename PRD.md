@@ -94,8 +94,11 @@ what was in them.
 
 Search and communities, not ads.
 
-- Programmatic SEO: one page per (bank, app) pair, e.g. "GTBank statement to YNAB". The set
-  grows automatically as the engine ships banks.
+- Programmatic SEO: one page per (bank, app) pair, e.g. "GTBank statement to YNAB", under a hub
+  per bank and per app. The set grows automatically as the engine ships banks. Each page earns
+  its place with facts only it has (the bank's checks, the app's notes, the real file the app
+  gets), so it never reads as a doorway page. Watch Search Console for pages left out; the
+  fallback is noindex on the long tail, never thinner pages.
 - Communities where the pain lives: r/ynab, r/actualbudget, the Actual Discord, Nairaland's
   personal-finance board, Nigerian money-Twitter. Launch post is the honest builder story.
 - A listing PR to bank2ynab's converter directory.

@@ -66,6 +66,9 @@ src/
 │   ├── statement.ts        display helpers: BANKS, bank names, summary, checks, 3-row preview, pure
 │   ├── targets.ts          picker selectors over TARGETS: featured, more, search, find, pure
 │   ├── save-file.ts        hands a browser-built file to the user as a download
+│   ├── site.ts             titles, descriptions, theme colours, JSON-LD: what search and shares show
+│   ├── routes.ts           every (bank, app) page and the bank and app hubs: slugs, paths, links, pure
+│   ├── example-statement.ts made-up statement in a bank's real shape, for each page's example file
 │   ├── links.ts            outbound links in one place, plus the build's commit link
 │   ├── sky.ts              time of day from the Lagos clock, and the pre-paint script
 │   └── turnstile-verify.ts server-side Turnstile siteverify call
@@ -79,15 +82,22 @@ src/
 │   ├── hero/               client island: reducer (hero.tsx), the card and one file per card
 │   │                       state, app picker, sun/moon toggle, the Turnstile widget
 │   ├── scene/              danfo (the bus and its five loads), street and road art
-│   └── sections/           static sections, one file each: nav, route stops, conveyor,
-│                           why not link, privacy and FAQ, terminus footer
+│   ├── sections/           static sections, one file each: nav, route stops, conveyor,
+│   │                       why not link, privacy and FAQ, trip planner, route details and
+│   │                       links, hubs, the example file, terminus
+│   └── share-image.tsx     the share preview every page renders at build (next/og)
 ├── types/turnstile.d.ts    ambient typing for the Turnstile script (window.turnstile)
 └── app/
-    ├── page.tsx          the single page: nav, hero, sections, terminus footer
+    ├── page.tsx          the home page: nav, hero, sections, every-route index, terminus
+    ├── [route]/          one prerendered page and share image per (bank, app) pair
+    ├── banks/[bank]/     a hub per bank: its checks, every app it can go to
+    ├── apps/[app]/       a hub per app: its file, import steps, notes, every bank that feeds it
     ├── layout.tsx        fonts (Bungee, DM Sans, JetBrains Mono) + the lockup metadata
     ├── globals.css       danfo tokens and base styles (see DESIGN.md)
     ├── motion.css        the in-world animations
     ├── sky.css           the time-of-day scene
+    ├── icon.svg, apple-icon.png, opengraph-image.tsx, manifest.ts, robots.ts, sitemap.ts
+    │                     favicon and SEO, all prerendered (open-next.config.ts serves them)
     └── api/parse/route.ts proxy: key server-side, Turnstile, the sample and demo hard-fails
 ```
 

@@ -104,7 +104,25 @@ The hero and nav follow the clock in Lagos (`src/lib/sky.ts`), because the stree
 3. The conveyor (ink band): a raw statement fragment, the bus, the clean CSV.
 4. Why not just link your bank: three sourced cards.
 5. Privacy plate and FAQ.
-6. Terminus footer: "Last stop: your budget." with the CTA and the bus parked with bundles.
+6. Plan your trip: the trip planner (From bank, To app, Go) on an ink board, then one quiet
+   line each of bank and app hub links. Never a grid of every route: that is 56 identical cells.
+7. Terminus footer: "Last stop: your budget." with the CTA and the bus parked with bundles.
+
+### Route and hub pages
+
+The bank-and-app pages (`/first-bank-statement-to-ynab`) and the hubs (`/banks/opay`,
+`/apps/ynab`) reuse the home's parts; each must carry facts only it has (PRD.md, Distribution).
+
+- Nav: the breadcrumb is a pill beside the logo, never a strip that breaks the sky. Phones show
+  only the parent crumb.
+- Hero: the same scene with the page's own headline ("OPay in." / "YNAB out."). A page that names
+  an app preselects it once the statement is parsed.
+- Route page: three stops in this route's own facts, then the example file on an ink band (the
+  real writer output from a made-up statement in the bank's shape, labelled EXAMPLE), then
+  "Another trip?": the trip planner starting on this route ("You're here" until a picker
+  changes) and two quiet lines of neighbouring routes, each ending at its hub.
+- Hubs: a facts block, then equal-height cards (every row as tall as the tallest) linking to
+  each route.
 
 ## The hero card
 
