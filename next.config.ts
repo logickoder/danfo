@@ -13,11 +13,12 @@ function git(...args: string[]): string {
 }
 
 // The commit this build came from, shown in the footer so anyone can match the live site to the
-// public code. Cloudflare Workers Builds passes it in; local builds ask git. A build with
+// public code. CI passes it in (GitHub Actions: GITHUB_SHA; Cloudflare Workers Builds:
+// WORKERS_CI_COMMIT_SHA), building from a clean checkout; local builds ask git. A build with
 // uncommitted changes says so: its code is not exactly what the commit holds. Production
 // builds only: dev loads this file in several processes and has no live site to match.
 function commitEnv(): Record<string, string> {
-  const ci = process.env.WORKERS_CI_COMMIT_SHA
+  const ci = process.env.GITHUB_SHA ?? process.env.WORKERS_CI_COMMIT_SHA
   if (ci) return { COMMIT_SHA: ci, COMMIT_DIRTY: '' }
   return {
     COMMIT_SHA: git('rev-parse', 'HEAD'),
